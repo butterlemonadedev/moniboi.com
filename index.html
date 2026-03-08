@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MONIBOI — Money is Your Health Bar</title>
+    <meta name="description" content="A roguelike life simulator where money is your health bar. Draw cards, hustle, scheme, and survive.">
+    <link rel="icon" type="image/png" href="/icon.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #1C1C2B;
+            color: #E6E6F2;
+            font-family: 'Courier New', Courier, monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 60px 24px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 3.5rem;
+            color: #FFE580;
+            letter-spacing: 0.15em;
+            margin-bottom: 12px;
+        }
+        .tagline {
+            font-size: 1.1rem;
+            color: #B3B3CC;
+            margin-bottom: 48px;
+        }
+        .store-links {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+        .store-link {
+            display: inline-block;
+            background: #1E1E38;
+            color: #E6E6F2;
+            text-decoration: none;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border: 1px solid #333355;
+            transition: background 0.2s;
+        }
+        .store-link:hover {
+            background: #2A2A4A;
+        }
+        .store-link .label {
+            color: #9999B3;
+            font-size: 0.85rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: #333355;
+            margin: 0 auto 48px;
+        }
+        .pitch {
+            color: #B3B3CC;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 48px;
+            text-align: left;
+        }
+        .pitch strong {
+            color: #FFE580;
+        }
+        .legal {
+            margin-top: auto;
+            padding: 24px;
+            font-size: 0.8rem;
+            color: #9999B3;
+        }
+        .legal a {
+            color: #9999B3;
+            text-decoration: underline;
+        }
+        .legal a:hover {
+            color: #E6E6F2;
+        }
+        footer {
+            color: #9999B3;
+            font-size: 0.75rem;
+            padding-bottom: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MONIBOI</h1>
+        <p class="tagline">Money is your health bar. Go broke and it's game over.</p>
+
+        <div class="store-links">
+            <a class="store-link" href="#" id="google-play">
+                <span class="label">Download on</span>
+                Google Play
+            </a>
+            <a class="store-link" href="#" id="app-store">
+                <span class="label">Download on the</span>
+                App Store
+            </a>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="pitch">
+            Every turn, you draw action cards — hustle a side gig, enroll in a class, invest in crypto, or do something you'll probably regret.<br><br>
+            Bills come fast. Skills level slow. <strong>One bad break and you're done.</strong><br><br>
+            Story arcs disguised as normal cards. Random events that don't care if you're ready. Ventures that promise passive income but deliver overhead.<br><br>
+            A roguelike life sim with dark humor, card-based decisions, and zero sugar-coating.
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="legal">
+            <a href="/privacy-policy">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="/terms-of-service">Terms of Service</a> &nbsp;&middot;&nbsp; <a href="mailto:info@butterlemonade.com">Contact</a>
+        </div>
+    </div>
+    <footer>&copy; 2026 Butterlemonade</footer>
+</body>
+</html>
