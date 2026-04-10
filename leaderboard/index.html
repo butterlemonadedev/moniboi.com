@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MONIBOI - Global Leaderboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1C1C2B;
+            color: #E6E6F2;
+            font-family: 'Courier New', 'Consolas', monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            letter-spacing: 4px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: normal;
+            color: #B3B3CC;
+            margin-bottom: 32px;
+        }
+
+        .status {
+            text-align: center;
+            color: #9999B3;
+            font-style: italic;
+            margin-bottom: 16px;
+            font-size: 0.85rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+        thead th {
+            text-align: left;
+            padding: 12px 8px;
+            border-bottom: 1px solid #333355;
+            color: #B3B3CC;
+            font-size: 0.85rem;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        thead th:first-child {
+            width: 50px;
+            text-align: center;
+        }
+
+        thead th:nth-child(3) {
+            text-align: right;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(51, 51, 85, 0.4);
+            transition: background-color 0.15s;
+        }
+
+        tbody tr:hover {
+            background-color: rgba(43, 43, 69, 0.6);
+        }
+
+        tbody td {
+            padding: 10px 8px;
+            font-size: 0.95rem;
+        }
+
+        tbody td:first-child {
+            text-align: center;
+            color: #9999B3;
+            font-weight: bold;
+        }
+
+        .money {
+            color: #FFE580;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .name {
+            color: #E6E6F2;
+        }
+
+        .detail {
+            color: #B3B3CC;
+        }
+
+        .cause {
+            color: #9999B3;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 0;
+            color: #9999B3;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        .error {
+            text-align: center;
+            padding: 60px 0;
+            color: #FF6666;
+            font-style: italic;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 60px 0;
+            color: #9999B3;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #9999B3;
+            font-size: 0.8rem;
+            border-top: 1px solid #333355;
+            width: 100%;
+            max-width: 900px;
+            margin-top: auto;
+        }
+
+        footer a {
+            color: #FFE580;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .refresh-note {
+            text-align: center;
+            color: #9999B3;
+            font-size: 0.75rem;
+            margin-top: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1rem;
+            }
+
+            .container {
+                padding: 20px 12px;
+            }
+
+            thead th, tbody td {
+                padding: 8px 4px;
+                font-size: 0.8rem;
+            }
+
+            /* Hide Turns column on mobile */
+            thead th:nth-child(5),
+            tbody td:nth-child(5) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MONIBOI</h1>
+        <h2>Global Leaderboard</h2>
+
+        <div id="content">
+            <div class="loading" id="loading">Loading scores...</div>
+        </div>
+
+        <div class="refresh-note" id="refresh-note" style="display: none;">
+            Auto-refreshes every 5 minutes
+        </div>
+    </div>
+
+    <footer>
+        <p>Play Moniboi</p>
+        <p>
+            <a href="https://apps.apple.com/us/app/moniboi/id6760241859">App Store</a> &middot;
+            <a href="https://play.google.com/store/apps/details?id=com.butterlemonade.moniboi">Google Play</a>
+        </p>
+        <p style="margin-top: 12px;">
+            <a href="/">moniboi.com</a> &middot;
+            <a href="/privacy-policy.html">Privacy Policy</a>
+        </p>
+    </footer>
+
+    <script>
+        const contentEl = document.getElementById('content');
+        const refreshNote = document.getElementById('refresh-note');
+
+        function formatMoney(amount) {
+            return '$' + amount.toLocaleString('en-US');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function renderTable(scores) {
+            if (scores.length === 0) {
+                contentEl.innerHTML = '<div class="empty">No scores yet. Go hustle.</div>';
+                refreshNote.style.display = 'block';
+                return;
+            }
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Money</th>
+                            <th>Age</th>
+                            <th>Turns</th>
+                            <th>Cause</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            scores.forEach((score, index) => {
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td class="name">${escapeHtml(score.displayName)}</td>
+                        <td class="money">${formatMoney(score.money)}</td>
+                        <td class="detail">${score.age || '?'}</td>
+                        <td class="detail">${score.turns || '?'}</td>
+                        <td class="cause">${escapeHtml(score.deathCause)}</td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            contentEl.innerHTML = html;
+            refreshNote.style.display = 'block';
+        }
+
+        async function fetchScores() {
+            try {
+                const res = await fetch('/api/scores');
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const scores = await res.json();
+                renderTable(scores);
+            } catch (error) {
+                console.error('Error fetching scores:', error);
+                contentEl.innerHTML = '<div class="error">Failed to load scores. Check back later.</div>';
+                refreshNote.style.display = 'block';
+            }
+        }
+
+        fetchScores();
+        setInterval(fetchScores, 300000);
+    </script>
+</body>
+</html>
